@@ -1,40 +1,48 @@
-import React from 'react';
+import { useContext } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { ListContext } from '../contexts/ListContext';
 
-function NotesForm() {
-  return (
-    <Formik initialValues={{ title: "", body:""}}
-            validate={ values =>{
-                const errors = {};
-                if(!values.title){
-                    errors.title = "El título es requerido"
-                }else if (!values.message){
-                    errors.message= "El mensaje es requerido"
-                }
-return errors;
+function NotesForm(){
+  const { add } = useContext(ListContext);
 
-            }}
+  return(
+    <Formik
+      initialValues={{ title: '', body: '' }}
+      validate={values => {
+        const errors = {};
+        if (!values.title) {
+          errors.title = 'Required';
+        }
+        if (!values.body) {
+          errors.body = 'Required';
+        }
+        return errors;
+      }}
+      onSubmit={(values, { setSubmitting }) => {
+        add(values);
+        setSubmitting(false);
+        // Clear form
+        values.title = '';
+        values.body = '';
+      }}
     >
-{
-    ({isSubmitting}) =>(
+      {({ isSubmitting }) => (
         <Form className='form'>
-        <div>
-          <label htmlFor="title">Título</label>
-          <Field type="text" name="title" />
-          <ErrorMessage name="title" component="p" />
-        </div>
-        <div>
-          <label htmlFor="body">Qué quieres guardar</label>
-          <Field as="textarea" name="message" />
-          <ErrorMessage name="message" component="p" />
-        </div>
-        <button type='submit' disabled={isSubmitting}>
-            {isSubmitting ? "Guardando tu nota" : "Guardar nota"}
-        </button>
-        
-      </Form>
-    )
-}
+          <div>
+            <label htmlFor="title">Título</label>
+            <Field type="text" name="title" />
+            <ErrorMessage name="title" component="div" />
+          </div>
+          <div>
+            <label htmlFor="body">Qué quieres guardar</label>
+            <Field as="textarea" name="body" />
+            <ErrorMessage name="body" component="div" />
+          </div>
+          <button type="submit" disabled={isSubmitting}>
+            Guardar nota
+          </button>
+        </Form>
+      )}
     </Formik>
   )
 }

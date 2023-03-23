@@ -1,12 +1,10 @@
-import React from 'react'
-
-function Note({key, title, message}) {
+function Note({item}){
   return (
-<div className='note'>
-<h2>{title}</h2>
-<p>{message}</p>
-</div>
-  )
+    <div className="note">
+      <h2>{item.title}</h2>
+      <p>{item.body}</p>
+    </div>
+  );
 }
 
-export default Note
+export default Note;
